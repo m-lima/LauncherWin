@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>412</width>
+    <height>50</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Launcher</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QLineEdit" name="txtTarget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>113</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>google</string>
+    </property>
+   </widget>
+   <widget class="ArgumentEditor" name="txtArgument">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>10</y>
+      <width>271</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ArgumentEditor</class>
+   <extends>QLineEdit</extends>
+   <header>src/main/argumenteditor.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>txtArgument</tabstop>
+  <tabstop>txtTarget</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

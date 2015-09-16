@@ -1,0 +1,8 @@
+[ ] Pause hotkeys
+[ ] Customize hotkeys
+[ ] Installer
+[ ] Save options
+[ ] Manual
+[ ] GitHub
+[ ] Get focus (force)
+[ ] Quick launch

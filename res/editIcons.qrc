@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="edit">
+    <file>add.png</file>
+    <file>delete.png</file>
+    <file>delete-alt.png</file>
+    <file>ok.png</file>
+  </qresource>
+</RCC>
