@@ -3,12 +3,8 @@
 
 #include <QDialog>
 #include <QLocalServer>
-#include <QLocalSocket>
-#include "windows.h"
 
 #include "../util/target.h"
-#include "../util/constants.h"
-#include "../util/persistencehandler.h"
 
 namespace Ui {
 class OptionsDialog;
@@ -23,13 +19,14 @@ public:
     ~OptionsDialog();
 
 private:
-    void initialize(QList<Target *> *targets);
-
     Ui::OptionsDialog *ui;
-
     QLocalServer *server;
 
+    void initialize(QList<Target *> *targets);
+
 private slots:
+    void newConnection();
+
     void on_lstTargets_itemSelectionChanged();
     void on_btnSave_clicked();
     void on_txtTarget_editingFinished();
@@ -37,7 +34,7 @@ private slots:
     void on_txtQuery_editingFinished();
     void on_txtHotKey_editingFinished();
     void on_chkEnabled_stateChanged(int state);
-    void newConnection();
+    void on_rdoQuery_toggled(bool checked);
 };
 
 #endif // OPTIONSDIALOG_H

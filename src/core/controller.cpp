@@ -1,8 +1,15 @@
 #include "controller.h"
 
+#include <QApplication>
+#include <QProcess>
+
+#include "../util/constants.h"
+
 Controller::Controller(QObject *parent) :
     QObject(parent)
 {
+    paused = false;
+
     if (QSystemTrayIcon::isSystemTrayAvailable())
     {
         tray = new TrayIcon(QIcon(IMG_TRAY), this);
@@ -13,9 +20,8 @@ Controller::Controller(QObject *parent) :
         tray = NULL;
     }
 
-    capturer = new HotkeyCapturer();
-    capturer->moveToThread(capturer);
-    connect(capturer, SIGNAL(hotkeyPressed(QString)), SLOT(launch(QString)));
+    capturer = NULL;
+    setCapturerActive(true);
 }
 
 Controller::~Controller()
@@ -27,13 +33,11 @@ Controller::~Controller()
 void Controller::initialize()
 {
     if (tray) tray->show();
-    capturer->start();
 }
 
 void Controller::finalize()
 {
-    capturer->deactivate();
-    capturer->deleteLater();
+    setCapturerActive(false);
 
     if (tray) {
         tray->hide();
@@ -43,10 +47,37 @@ void Controller::finalize()
     exit(0);
 }
 
+void Controller::setCapturerActive(bool active)
+{
+    if (active) {
+        if (capturer == NULL) {
+            capturer = new HotkeyCapturer(paused);
+            capturer->moveToThread(capturer);
+            connect(capturer, SIGNAL(hotkeyPressed(QString)), SLOT(launch(QString)));
+            capturer->start();
+        }
+    } else {
+        if (capturer) {
+            capturer->deactivate();
+            delete capturer;
+            capturer = NULL;
+        }
+    }
+}
+
 void Controller::launch(QString target)
 {
-    QProcess process(this);
-    process.startDetached(QCoreApplication::applicationFilePath(), QStringList(target));
+    if (target == CAPTURE_PAUSE) {
+        setCapturerActive(false);
+        paused = !paused;
+        setCapturerActive(true);
+//    } else if (target == CONSOLE) {
+//        QProcess process(this);
+//        process.startDetached("C:\\Users\\mflim_000\\Bin\\Console2\\Console.exe");
+    } else {
+        QProcess process(this);
+        process.startDetached(QCoreApplication::applicationFilePath(), QStringList(target));
+    }
 }
 
 void Controller::trayOpen()
@@ -61,7 +92,8 @@ void Controller::closeApp()
 
 void Controller::edit()
 {    
-    capturer->setPaused(true);
+//    capturer->setPaused(true);
+    setCapturerActive(false);
 
     QStringList arguments;
     arguments.append("edit");
@@ -77,6 +109,9 @@ void Controller::editClosed(int code)
     if (code == EDIT_SAVE) {
         capturer->reload();
     }
-    capturer->setPaused(false);
-    qDebug() << "Finished: " << QString::number(code);
+
+    setCapturerActive(true);
+//    disconnect(
+//    capturer->setPaused(false);
+    //q/Debug() << "Finished: " << QString::number(code);
 }

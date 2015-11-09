@@ -5,10 +5,7 @@
 #include <QStringList>
 
 #include <QUrl>
-#include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QXmlStreamReader>
-#include <QEventLoop>
 
 class QueryWorker : public QThread
 {
@@ -18,16 +15,15 @@ public:
     ~QueryWorker();
     void run() Q_DECL_OVERRIDE;
 
-signals:
-    void queryFinished(QStringList *results);
-
-    
-public slots:
-    void abort();
-
 private:
     QUrl *url;
     QNetworkReply *reply;
+
+signals:
+    void queryFinished(QStringList *results);
+    
+public slots:
+    void abort();
 };
 
 #endif // QUERYWORKER_H

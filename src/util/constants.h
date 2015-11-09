@@ -41,5 +41,7 @@
 #define HOT_SHIFT "SHIFT"
 #define HOT_CTRL "CTRL"
 #define HOT_ALT "ALT"
+#define CAPTURE_PAUSE "PAUSE"
+#define CONSOLE "CONSOLE"
 
 #endif // CONSTANST_H

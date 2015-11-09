@@ -1,16 +1,8 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <QApplication>
-#include <QProcess>
-
-
-#include <QDebug>
-
-
 #include "trayicon.h"
 #include "hotkeycapturer.h"
-#include "../util/constants.h"
 
 class Controller : public QObject
 {
@@ -23,9 +15,11 @@ public:
     void finalize();
 
 private:
-
+    bool paused;
     TrayIcon *tray;
     HotkeyCapturer *capturer;
+
+    void setCapturerActive(bool);
 
 private slots:
     void launch(QString);

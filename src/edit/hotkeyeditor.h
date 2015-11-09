@@ -4,14 +4,6 @@
 #include <QLineEdit>
 #include <QKeyEvent>
 
-
-
-#include <QDebug>
-
-
-
-#include "../util/constants.h"
-
 class HotKeyEditor : public QLineEdit
 {
     Q_OBJECT

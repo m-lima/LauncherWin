@@ -1,10 +1,19 @@
 #include "hotkeycapturer.h"
 
-HotkeyCapturer::HotkeyCapturer(QObject *parent) :
+#include <QFile>
+#include <QStandardPaths>
+#include <QTextStream>
+#include "windows.h"
+
+#include "../util/constants.h"
+#include "../util/persistencehandler.h"
+
+HotkeyCapturer::HotkeyCapturer(const bool &paused, QObject *parent) :
     QThread(parent)
 {
     active = false;
-    paused = false;
+    paused_ = paused;
+    setTerminationEnabled();
 }
 
 HotkeyCapturer::~HotkeyCapturer()
@@ -21,26 +30,42 @@ void HotkeyCapturer::unregisterHotkeys()
     hotkeys.clear();
 }
 
-void HotkeyCapturer::setPaused(bool newPaused)
-{
-    paused = newPaused;
-}
+//void HotkeyCapturer::setPaused(bool newPaused)
+//{
+//    if (newPaused && !paused) {
+//        unregisterHotkeys();
+//        paused = newPaused;
+//        return;
+//    }
 
+//    if (!newPaused && paused) {
+//        registerHotkeys();
+//        paused = newPaused;
+//        return;
+//    }
+//}
 
 void HotkeyCapturer::registerHotkeys()
 {
     int count = 0;
 
     //Register default hotKey (CTRL + ALT + Space)
-    hotkeys.append("");
-    qDebug() << "Space HK = " << RegisterHotKey(0, count, MOD_ALT | MOD_CONTROL | 0x4000, ' ');
+    hotkeys.append(CAPTURE_PAUSE);
+    RegisterHotKey(0, count, MOD_ALT | MOD_CONTROL | 0x4000, ' ');
     count++;
 
-    QList<Target*> *targetList = PersistenceHandler::loadTargets(this);
+    //Workaround for launching Console2
+//    hotkeys.append(CONSOLE);
+//    RegisterHotKey(0, count, MOD_ALT | MOD_CONTROL | 0x4000, 'L');
+//    count++;
+
+    if (paused_) return;
+
+    QList<Target *> *targetList = PersistenceHandler::loadTargets(this);
     QStringList split;
     QStringList::iterator splitElement;
 
-    for (QList<Target*>::const_iterator target = targetList->cbegin(); target != targetList->cend(); target++) {
+    for (QList<Target *>::const_iterator target = targetList->cbegin(); target != targetList->cend(); target++) {
         if (!((*target)->isEnabled()) || (*target)->getHotKey().isEmpty()) {
             continue;
         }
@@ -111,12 +136,11 @@ void HotkeyCapturer::run() Q_DECL_OVERRIDE
     active = true;
     registerHotkeys();
 
+    //threadID = GetCurrentThreadId();
+
     MSG msg;
     while (active && GetMessage(&msg, NULL, 0, 0) != 0) {
-        if (paused) {
-            continue;
-        }
-
+//        if (msg.message == SHUTDOWN_MESSAGE) return;
         if (msg.message == WM_HOTKEY) {
             emit(hotkeyPressed(hotkeys.at(msg.wParam)));
         }
@@ -128,7 +152,7 @@ void HotkeyCapturer::deactivate()
 {
     unregisterHotkeys();
     active = false;
-    quit();
+//    PostThreadMessage(threadID, SHUTDOWN_MESSAGE, 0, 0);
     terminate();
 }
 

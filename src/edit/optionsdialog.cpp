@@ -1,12 +1,17 @@
 #include "optionsdialog.h"
 #include "ui_optionsdialog.h"
 
-OptionsDialog::OptionsDialog(QList<Target*> *targets, QWidget *parent) :
+#include <QLocalSocket>
+
+#include "../util/constants.h"
+#include "../util/persistencehandler.h"
+
+OptionsDialog::OptionsDialog(QList<Target *> *targets, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::OptionsDialog)
 {
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     ui->setupUi(this);
-
     server = new QLocalServer(this);
     connect(server, SIGNAL(newConnection()), this, SLOT(newConnection()));
     server->listen(SERVER_EDIT);
@@ -32,9 +37,9 @@ void OptionsDialog::newConnection()
     activateWindow();
 }
 
-void OptionsDialog::initialize(QList<Target*> *targets)
+void OptionsDialog::initialize(QList<Target *> *targets)
 {
-    QList<Target*>::const_iterator i;
+    QList<Target *>::const_iterator i;
     for (i = targets->cbegin(); i != targets->cend(); ++i) {
         ui->lstTargets->addItem(*i);
     }
@@ -169,7 +174,7 @@ void OptionsDialog::initialize(QList<Target*> *targets)
 
 void OptionsDialog::on_lstTargets_itemSelectionChanged()
 {
-    Target *target = static_cast<Target*>(ui->lstTargets->currentItem());
+    Target *target = static_cast<Target *>(ui->lstTargets->currentItem());
     ui->txtTarget->setText(target->getName());
     ui->txtCommand->setText(target->getCommand());
     ui->txtQuery->setText(target->getQuery());
@@ -179,11 +184,11 @@ void OptionsDialog::on_lstTargets_itemSelectionChanged()
 
 void OptionsDialog::on_btnSave_clicked()
 {
-    QList<Target*> *targets = new QList<Target*>();
+    QList<Target *> *targets = new QList<Target*>();
 
     for(int i = 0; i < ui->lstTargets->count(); ++i)
     {
-        targets->append(static_cast<Target*>(ui->lstTargets->item(i)));
+        targets->append(static_cast<Target *>(ui->lstTargets->item(i)));
     }
 
     PersistenceHandler::saveTargets(targets, this);
@@ -194,31 +199,37 @@ void OptionsDialog::on_btnSave_clicked()
 
 void OptionsDialog::on_txtTarget_editingFinished()
 {
-    Target *target = static_cast<Target*>(ui->lstTargets->currentItem());
+    Target *target = static_cast<Target *>(ui->lstTargets->currentItem());
     target->setName(ui->txtTarget->text());
 }
 
 void OptionsDialog::on_txtCommand_editingFinished()
 {
-    Target *target = static_cast<Target*>(ui->lstTargets->currentItem());
+    Target *target = static_cast<Target *>(ui->lstTargets->currentItem());
     target->setCommand(ui->txtCommand->text());
 }
 
 void OptionsDialog::on_txtQuery_editingFinished()
 {
-    Target *target = static_cast<Target*>(ui->lstTargets->currentItem());
+    Target *target = static_cast<Target *>(ui->lstTargets->currentItem());
     target->setQuery(ui->txtQuery->text());
 }
 
 void OptionsDialog::on_txtHotKey_editingFinished()
 {
-    Target *target = static_cast<Target*>(ui->lstTargets->currentItem());
+    Target *target = static_cast<Target *>(ui->lstTargets->currentItem());
     target->setHotKey(ui->txtHotKey->text());
 }
 
 void OptionsDialog::on_chkEnabled_stateChanged(int state)
 {
-    Target *target = static_cast<Target*>(ui->lstTargets->currentItem());
+    Target *target = static_cast<Target *>(ui->lstTargets->currentItem());
     target->setEnabled(state);
 }
 
+
+void OptionsDialog::on_rdoQuery_toggled(bool checked)
+{
+    ui->txtQuery->setEnabled(checked);
+    ui->lblQuery->setEnabled(checked);
+}

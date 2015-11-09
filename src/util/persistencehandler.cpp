@@ -1,10 +1,19 @@
 #include "persistencehandler.h"
 
+#include <QStandardPaths>
+#include <QFile>
+#include <QXmlStreamReader>
+#include <QErrorMessage>
+#include <QList>
+#include <QStringList>
+#include <QTextStream>
+#include "constants.h"
+
 PersistenceHandler::PersistenceHandler()
 {
 }
 
-void PersistenceHandler::saveHistory(QString const & target, QStringList const &historyList, QObject * parent)
+void PersistenceHandler::saveHistory(QString const &target, QStringList const &historyList, QObject *parent)
 {
     QString path(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     path.append('/');
@@ -38,7 +47,7 @@ void PersistenceHandler::loadHistory(const QString &target, QStringList *list, Q
         QTextStream stream(history);
         QString line;
 
-        while(!stream.atEnd()) {
+        while (!stream.atEnd()) {
             line = stream.readLine().trimmed();
 
             if (line.isEmpty()) {
@@ -106,7 +115,7 @@ void PersistenceHandler::saveLast(const QString &target, const QString &argument
     delete last;
 }
 
-QList<Target*> *PersistenceHandler::loadTargets(bool fetchDisabled, QObject * parent)
+QList<Target *> *PersistenceHandler::loadTargets(bool fetchDisabled, QObject *parent)
 {
     QString path(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     path.append(FILE_TARGETS);
@@ -114,7 +123,7 @@ QList<Target*> *PersistenceHandler::loadTargets(bool fetchDisabled, QObject * pa
 
 //    QErrorMessage errorMessage;
 
-    QList<Target*> *targets = new QList<Target*>();
+    QList<Target *> *targets = new QList<Target *>();
 
     if (config->open(QIODevice::ReadOnly | QIODevice::Text)) {
         QXmlStreamReader reader(config);
@@ -229,7 +238,7 @@ void PersistenceHandler::saveTargets(QList<Target *> *targets, QObject *parent)
         QStringList split;
         QString upper;
 
-        QList<Target*>::const_iterator target;
+        QList<Target *>::const_iterator target;
         for (target = targets->cbegin(); target != targets->cend(); ++target) {
             writer.writeStartElement(XML_TARGET);
                 writer.writeAttribute(XML_NAME, (*target)->getName());

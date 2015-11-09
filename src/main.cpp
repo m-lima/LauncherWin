@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QStyleFactory>
 #include <QObject>
 #include <QDesktopWidget>
 #include <QSharedMemory>
@@ -35,6 +36,7 @@ void center(QWidget &widget)
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QApplication::setStyle(QStyleFactory::create("Fusion"));
 
     QCoreApplication::setOrganizationName("Mali");
     QCoreApplication::setOrganizationDomain("mali.com");
@@ -70,7 +72,7 @@ int main(int argc, char *argv[])
 
         QTime *time = new QTime();
         time->start();
-        QList<Target*> *targets = PersistenceHandler::loadTargets(true);
+        QList<Target *> *targets = PersistenceHandler::loadTargets(true);
 
         if (socket->waitForConnected(100 - time->elapsed())) {
             socket->write(argv[1], strlen(argv[1]));
@@ -101,7 +103,7 @@ int main(int argc, char *argv[])
 
         QTime *time = new QTime();
         time->start();
-        QList<Target*> *targets = PersistenceHandler::loadTargets();
+        QList<Target *> *targets = PersistenceHandler::loadTargets();
 
         if (socket->waitForConnected(100 - time->elapsed())) {
             socket->write(argv[1], strlen(argv[1]));

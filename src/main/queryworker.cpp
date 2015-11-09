@@ -1,5 +1,9 @@
 #include "queryworker.h"
 
+#include <QNetworkAccessManager>
+#include <QXmlStreamReader>
+#include <QEventLoop>
+
 QueryWorker::QueryWorker(QString &query, QString &argument, QObject *parent) :
     QThread(parent)
 {

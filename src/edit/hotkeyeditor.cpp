@@ -1,5 +1,7 @@
 #include "hotkeyeditor.h"
 
+#include "../util/constants.h"
+
 HotKeyEditor::HotKeyEditor(QWidget *parent) :
     QLineEdit(parent)
 {
@@ -10,7 +12,7 @@ void HotKeyEditor::keyReleaseEvent(QKeyEvent *e)
     QLineEdit::keyReleaseEvent(e);
     char keyCode = e->key();
     QKeySequence sequence(keyCode);
-    qDebug() << sequence.toString(QKeySequence::NativeText);
+    //q/Debug() << sequence.toString(QKeySequence::NativeText);
     if (keyCode >= 32 && keyCode <= 126) {
         QString hotKey = QString(keyCode);
         if (e->modifiers().testFlag(Qt::AltModifier)) {

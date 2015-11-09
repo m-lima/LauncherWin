@@ -1,15 +1,30 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QList<Target*> *targets, QString target) :
+#include <QFile>
+#include <QCompleter>
+#include <QProcess>
+#include <QDesktopServices>
+#include <QTextStream>
+#include <QLocalSocket>
+#include <QStringListModel>
+#include "windows.h"
+
+#include "queryworker.h"
+#include "googleresultdelegate.h"
+#include "../util/constants.h"
+#include "../util/persistencehandler.h"
+
+MainWindow::MainWindow(QList<Target *> *targetList, QString target) :
     QMainWindow(0),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+//    setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
 
-    targetList = targets;
+    targetList_ = targetList;
     historyList = new QStringList();
 
     updateTargetCompleter();
@@ -19,14 +34,16 @@ MainWindow::MainWindow(QList<Target*> *targets, QString target) :
     server->listen(SERVER_MAIN);
 
     googleEnabled = true;
+    editingCompleter = 0;
 
+    forceFocus();
     initialize(target);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete targetList;
+    delete targetList_;
     delete historyList;
     server->close();
     delete server;
@@ -44,13 +61,16 @@ void MainWindow::newConnection()
     delete socket;
 
     initialize(target);
-
-    showNormal();
-    activateWindow();
+    on_txtArgument_textEdited(ui->txtArgument->text());
+//    showNormal();
+//    activateWindow();
 }
 
 void MainWindow::initialize(const QString &target)
 {
+    emit cancelQuery();
+    forceFocus();
+
     if (target == NULL || target.isEmpty()) {
         QString *target = new QString();
         QString *argument = new QString();
@@ -67,8 +87,29 @@ void MainWindow::initialize(const QString &target)
 
     } else {
         ui->txtTarget->setText(target);
-        ui->txtArgument->setText("");
+//        ui->txtArgument->setText("");
         ui->txtArgument->setFocus(Qt::ActiveWindowFocusReason);
+    }
+}
+
+void MainWindow::forceFocus()
+{
+    activateWindow();
+    HWND winID = (HWND) winId();
+
+    if (IsIconic(winID)) {
+        SendMessage(winID, WM_SYSCOMMAND, SC_RESTORE, 0);
+    }
+
+    DWORD foregroundThreadPID = GetWindowThreadProcessId(GetForegroundWindow(), NULL);
+    DWORD threadPID = GetWindowThreadProcessId(winID, NULL);
+
+    if (foregroundThreadPID != threadPID) {
+        AttachThreadInput(foregroundThreadPID, threadPID, true);
+        SetForegroundWindow(winID);
+        AttachThreadInput(foregroundThreadPID, threadPID, false);
+    } else {
+        SetForegroundWindow(winID);
     }
 }
 
@@ -90,13 +131,13 @@ void MainWindow::saveHistory(const Target &target)
     PersistenceHandler::saveHistory(target.getName(), *historyList, this);
 }
 
-void MainWindow::checkTarget(const QString & target)
+void MainWindow::checkTarget(const QString &target)
 {
     if (target.isEmpty()) {
         ui->txtArgument->setEnabled(false);
     } else {
         bool enabled = false;
-        for (QList<Target*>::const_iterator i = targetList->cbegin(); i != targetList->cend(); i++) {
+        for (QList<Target *>::const_iterator i = targetList_->cbegin(); i != targetList_->cend(); i++) {
             if (target.compare((*i)->getName(), Qt::CaseInsensitive)) {
                 enabled = true;
                 break;
@@ -109,7 +150,7 @@ void MainWindow::checkTarget(const QString & target)
 void MainWindow::updateTargetCompleter()
 {
     QStringList *targets = new QStringList();
-    for (QList<Target*>::const_iterator i = targetList->cbegin(); i != targetList->cend(); i++) {
+    for (QList<Target *>::const_iterator i = targetList_->cbegin(); i != targetList_->cend(); i++) {
         targets->append((*i)->getName());
     }
 
@@ -121,8 +162,9 @@ void MainWindow::updateTargetCompleter()
     delete targets;
 }
 
-void MainWindow::updateArgumentCompleter(QStringList * list, bool google)
+void MainWindow::updateArgumentCompleter(QStringList *list, bool google)
 {
+    editingCompleter++;
     QCompleter *completer = ui->txtArgument->completer();
 
     if (completer == NULL) {
@@ -149,6 +191,8 @@ void MainWindow::updateArgumentCompleter(QStringList * list, bool google)
     if (!list->isEmpty()) {
         completer->complete();
     }
+
+    editingCompleter--;
 }
 
 bool MainWindow::eventFilter(QObject *target, QEvent *event)
@@ -163,6 +207,7 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
 
 void MainWindow::on_txtArgument_focussed()
 {
+    if (editingCompleter) return;
     QString target = ui->txtTarget->text().trimmed();
 
     if (target == lastTarget) {
@@ -180,7 +225,7 @@ void MainWindow::on_txtArgument_focussed()
     if (!target.isEmpty()) {
         historyList->clear();
 
-        for (QList<Target*>::const_iterator i = targetList->cbegin(); i != targetList->cend(); i++) {
+        for (QList<Target *>::const_iterator i = targetList_->cbegin(); i != targetList_->cend(); i++) {
             if (target.compare((*i)->getName(), Qt::CaseInsensitive) == 0) {
 
                 //Loading query URL
@@ -203,7 +248,7 @@ void MainWindow::execute()
     QString target = ui->txtTarget->text().trimmed();
 
     if (!target.isEmpty()) {
-        for (QList<Target*>::const_iterator i = targetList->cbegin(); i != targetList->cend(); i++) {
+        for (QList<Target *>::const_iterator i = targetList_->cbegin(); i != targetList_->cend(); i++) {
             if (target.compare((*i)->getName(), Qt::CaseInsensitive) == 0) {
 
                 //Saving history
@@ -237,7 +282,7 @@ void MainWindow::execute()
     qApp->exit(0);
 }
 
-void MainWindow::keyReleaseEvent(QKeyEvent * event)
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_ScrollLock) {
         googleEnabled = !googleEnabled;
@@ -290,14 +335,14 @@ void MainWindow::on_txtArgument_textEdited(QString argument)
         QueryWorker *worker = new QueryWorker(queryURL, argument);
         worker->moveToThread(worker);
         connect(this, SIGNAL(cancelQuery()), worker, SLOT(abort()));
-        connect(worker, SIGNAL(queryFinished(QStringList*)), this, SLOT(queryDone(QStringList*)));
+        connect(worker, SIGNAL(queryFinished(QStringList *)), this, SLOT(queryDone(QStringList *)));
         connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
 
         worker->start();
     }
 }
 
-void MainWindow::queryDone(QStringList * results)
+void MainWindow::queryDone(QStringList *results)
 {
     if (!googleEnabled) {
         return;

@@ -57,7 +57,7 @@
   <customwidget>
    <class>ArgumentEditor</class>
    <extends>QLineEdit</extends>
-   <header>src/main/argumenteditor.h</header>
+   <header>src/view/argumenteditor.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

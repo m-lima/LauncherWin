@@ -6,15 +6,6 @@
 class Target : public QObject, public QListWidgetItem
 {
     Q_OBJECT
-private:
-    QString name;
-    QString command;
-    QString query;
-    bool enabled;
-    QString hotKey;
-
-//    static QBrush const & disabledBrush();
-//    Q_GLOBAL_STATIC_WITH_ARGS(QBrush, disabledBrush, (QColor(150, 150, 150)))
 
 public:
     enum Type {
@@ -23,27 +14,33 @@ public:
 
     explicit Target(QListWidget *parent = 0) : QListWidgetItem(parent, TargetType){}
 
-    inline QString const & getName() const {return name;} //*(new QString(qvariant_cast<QString>(data(Qt::DisplayRole))));}
-    inline QString const & getCommand() const {return command;}
-    inline QString const & getQuery() const {return query;}
-    inline bool const & isEnabled() const {return enabled;}
-    inline QString const & getHotKey() const {return hotKey;}
+    inline QString const & getName() const {return name_;} //*(new QString(qvariant_cast<QString>(data(Qt::DisplayRole))));}
+    inline QString const & getCommand() const {return command_;}
+    inline QString const & getQuery() const {return query_;}
+    inline bool const & isEnabled() const {return enabled_;}
+    inline QString const & getHotKey() const {return hotKey_;}
 
-signals:
+
+private:
+    QString name_;
+    QString command_;
+    QString query_;
+    bool enabled_;
+    QString hotKey_;
     
 public slots:
-    inline void setName(QString const & newName) {
-        name = newName;
-        setData(Qt::DisplayRole, newName);
+    inline void setName(QString const &name) {
+        name_ = name;
+        setData(Qt::DisplayRole, name);
 
         //Not viable, since setData() creates a copy anyways
         //{name = newName; setData(Qt::DisplayRole, name); name.append("YO!");}
     }
-    inline void setCommand(QString const & newCommand = "") {command = newCommand;}
-    inline void setQuery(QString const & newQuery = "") {query = newQuery;}
-    inline void setEnabled(bool const & newEnabled) {
-        enabled = newEnabled;
-        if (enabled) {
+    inline void setCommand(QString const &command = "") {command_ = command;}
+    inline void setQuery(QString const &query = "") {query_ = query;}
+    inline void setEnabled(bool const &enabled) {
+        enabled_ = enabled;
+        if (enabled_) {
             setData(Qt::ForegroundRole, 0);
         } else {
 
@@ -56,7 +53,7 @@ public slots:
             setData(Qt::ForegroundRole, QBrush(QColor(150, 150, 150)));
         }
     }
-    inline void setHotKey(QString const & newHotKey = "") {hotKey = newHotKey;}
+    inline void setHotKey(QString const &hotKey = "") {hotKey_ = hotKey;}
 };
 
 #endif // TARGET_H

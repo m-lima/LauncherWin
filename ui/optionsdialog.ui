@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>524</width>
-    <height>357</height>
+    <width>539</width>
+    <height>361</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -42,7 +42,7 @@
     <rect>
      <x>13</x>
      <y>7</y>
-     <width>501</width>
+     <width>511</width>
      <height>341</height>
     </rect>
    </property>
@@ -54,6 +54,9 @@
       </property>
       <item>
        <widget class="QListWidget" name="lstTargets">
+        <property name="whatsThis">
+         <string/>
+        </property>
         <property name="sortingEnabled">
          <bool>true</bool>
         </property>
@@ -155,27 +158,118 @@
        <widget class="QLineEdit" name="txtTarget"/>
       </item>
       <item>
-       <widget class="QLabel" name="lblCommand">
+       <widget class="QCheckBox" name="chkEnabled">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
-         <string>Command</string>
+         <string>Enabled</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="txtCommand"/>
+       <layout class="QHBoxLayout" name="hlyType">
+        <item>
+         <widget class="QRadioButton" name="rdoQuery">
+          <property name="text">
+           <string>Query launcher</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="rdoQuick">
+          <property name="text">
+           <string>Quick launcher</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QLabel" name="lblQuery">
+       <widget class="QLabel" name="lblHotKey">
         <property name="text">
-         <string>Query</string>
+         <string>Hot Key</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="txtQuery"/>
+       <widget class="HotKeyEditor" name="txtHotKey">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
+        <property name="acceptDrops">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
-       <spacer name="vspHotKey">
+       <widget class="QGroupBox" name="groupBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="title">
+         <string>Launch properties</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <widget class="QWidget" name="verticalLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>20</y>
+           <width>331</width>
+           <height>98</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLabel" name="lblCommand">
+            <property name="text">
+             <string>Command</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="txtCommand"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblQuery">
+            <property name="text">
+             <string>Suggestions Query</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="txtQuery"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <spacer name="vspMainBlank">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -185,72 +279,7 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>16</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="hlyHotKey">
-        <item>
-         <widget class="QCheckBox" name="chkEnabled">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Enabled</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblHotKey">
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="text">
-           <string>Hot Key</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="HotKeyEditor" name="txtHotKey">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::ClickFocus</enum>
-          </property>
-          <property name="acceptDrops">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <spacer name="vspMainBlank">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
+          <height>10</height>
          </size>
         </property>
        </spacer>
@@ -307,7 +336,10 @@
            <cursorShape>ArrowCursor</cursorShape>
           </property>
           <property name="toolTip">
-           <string>Add</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="whatsThis">
+           <string/>
           </property>
           <property name="text">
            <string>Save</string>
@@ -339,7 +371,10 @@
            <cursorShape>ArrowCursor</cursorShape>
           </property>
           <property name="toolTip">
-           <string>Delete</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cancel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="whatsThis">
+           <string/>
           </property>
           <property name="text">
            <string>Cancel</string>
@@ -370,14 +405,10 @@
  <tabstops>
   <tabstop>lstTargets</tabstop>
   <tabstop>txtTarget</tabstop>
-  <tabstop>txtCommand</tabstop>
-  <tabstop>txtQuery</tabstop>
-  <tabstop>chkEnabled</tabstop>
   <tabstop>btnAdd</tabstop>
   <tabstop>btnRemove</tabstop>
   <tabstop>btnSave</tabstop>
   <tabstop>btnCancel</tabstop>
-  <tabstop>txtHotKey</tabstop>
  </tabstops>
  <resources>
   <include location="../res/editIcons.qrc"/>
