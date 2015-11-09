@@ -1,8 +1,24 @@
-[ ] Pause hotkeys
-[ ] Customize hotkeys
-[ ] Installer
-[ ] Save options
-[ ] Manual
-[ ] GitHub
-[ ] Get focus (force)
-[ ] Quick launch
+[x] Core : Pause hotkeys (has to unregister)
+ |__> Implemented as CTRL + ALT + SPACE
+[ ] Edit : Customize pause
+[x] Core : Replace current pause with unregister
+[ ] Core : Set fusion?
+[ ] Core : QTextStream.readLineInto()
+[ ] Edit : Customize hotkeys
+[ ] Proj : Installer
+[ ] Edit : Save options
+[ ] Proj : Manual
+[x] Proj : GitHub
+[ ] Proj : Github description and pictures
+[x] Main : Get focus (force)
+[ ] Core - Edit : Quick launch (applications)
+[ ] Edit : Fix focus cycle UI
+[ ] Edit : Custom layout
+[ ] Main - Edit: Add suffix (F1, F2, etc) [eg. define]
+[ ] Main : Support multi-line
+
+<x> BUG - Main : With app open, hotkey to DIFFERENT target and start typing
+< > BUG - Main : Symbols are not being past through URL (run Google: c++ qt)
+< > BUG - Core : Fix threading! See SerialLogger for reference
+
+{ } Core : Analyze

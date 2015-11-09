@@ -21,10 +21,11 @@ SOURCES += src/main.cpp\
     src/main/mainwindow.cpp \
     src/main/googleresultdelegate.cpp \
     src/main/queryworker.cpp \
-    src/main/argumenteditor.cpp \
-    src/edit/optionsdialog.cpp \
     src/util/persistencehandler.cpp \
-    src/edit/hotkeyeditor.cpp
+    src/edit/optionsdialog.cpp \
+    src/edit/hotkeyeditor.cpp \
+    src/view/argumenteditor.cpp \
+    src/view/borderlayout.cpp
 
 HEADERS  += src/core/controller.h \
     src/core/trayicon.h \
@@ -33,12 +34,13 @@ HEADERS  += src/core/controller.h \
     src/main/mainwindow.h \
     src/main/googleresultdelegate.h \
     src/main/queryworker.h \
-    src/main/argumenteditor.h \
-    src/edit/optionsdialog.h \
     src/util/target.h \
     src/util/persistencehandler.h \
     src/util/constants.h \
-    src/edit/hotkeyeditor.h
+    src/edit/optionsdialog.h \
+    src/edit/hotkeyeditor.h \
+    src/view/argumenteditor.h \
+    src/view/borderlayout.h
 
 FORMS    += ui/mainwindow.ui \
     ui/optionsdialog.ui
