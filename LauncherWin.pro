@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = LauncherWin
 TEMPLATE = app
 
+include("../Libraries/QBorderLayout/QBorderLayout.pri")
+
 #QMAKE_CXXFLAGS += -Weffc++
 
 SOURCES += src/main.cpp\
@@ -24,8 +26,8 @@ SOURCES += src/main.cpp\
     src/util/persistencehandler.cpp \
     src/edit/optionsdialog.cpp \
     src/edit/hotkeyeditor.cpp \
-    src/view/argumenteditor.cpp \
-    src/view/borderlayout.cpp
+    src/view/argumenteditor.cpp
+    #src/view/borderlayout.cpp
 
 HEADERS  += src/core/controller.h \
     src/core/trayicon.h \
@@ -39,8 +41,8 @@ HEADERS  += src/core/controller.h \
     src/util/constants.h \
     src/edit/optionsdialog.h \
     src/edit/hotkeyeditor.h \
-    src/view/argumenteditor.h \
-    src/view/borderlayout.h
+    src/view/argumenteditor.h
+    #src/view/borderlayout.h
 
 FORMS    += ui/mainwindow.ui \
     ui/optionsdialog.ui
