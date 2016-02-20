@@ -17,9 +17,11 @@
 [ ] Main - Edit: Add suffix (F1, F2, etc) [eg. define]
 [ ] Main : Support multi-line
 [ ] Core : Make crossplatform
+[ ] Core : Revise thread situation
+[ ] Main : Deal with slow initialization (show screen before targets are loaded? record inputs in buffer?)
 
 <x> BUG - Main : With app open, hotkey to DIFFERENT target and start typing
-< > BUG - Main : Symbols are not being past through URL (run Google: c++ qt)
+<x> BUG - Main : Symbols are not being past through URL (run Google: c++ qt)
 < > BUG - Core : Fix threading! See SerialLogger for reference
 
 { } Core : Analyze

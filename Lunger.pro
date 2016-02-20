@@ -60,7 +60,8 @@ FORMS    += ui/mainwindow.ui \
 
 RC_FILE = Lunger.rc
 RESOURCES = res/trayIcon.qrc \
-    res/editIcons.qrc
+    res/editIcons.qrc \
+    res/config.qrc
 
 OTHER_FILES += \
     ToDo.txt

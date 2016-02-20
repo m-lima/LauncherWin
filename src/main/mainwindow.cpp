@@ -9,6 +9,8 @@
 #include <QLocalSocket>
 #include <QStringListModel>
 
+#include <QDebug>
+
 #include "queryworker.h"
 #include "googleresultdelegate.h"
 #include "../util/constants.h"
@@ -60,7 +62,7 @@ void MainWindow::newConnection()
     delete socket;
 
     initialize(target);
-    on_txtArgument_textEdited(ui->txtArgument->text());
+    on_txtArgument_textEdited();
 //    showNormal();
 //    activateWindow();
 }
@@ -86,7 +88,7 @@ void MainWindow::initialize(QString const &target)
 
     } else {
         ui->txtTarget->setText(target);
-//        ui->txtArgument->setText("");        
+//        ui->txtArgument->setText("");
         forceFocus();
         ui->txtArgument->setFocus(Qt::ActiveWindowFocusReason);
     }
@@ -242,7 +244,7 @@ void MainWindow::execute()
                 }
 
                 if (command.startsWith("http://") || command.startsWith("https://")) {
-                    command.append(ui->txtArgument->text().trimmed());
+                    command.append(ui->txtArgument->encodedText());
                     QDesktopServices::openUrl(QUrl(command));
                 } else {
                     command.append(" ");
@@ -268,7 +270,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         emit cancelQuery();
 
         if (googleEnabled) {
-            on_txtArgument_textEdited(ui->txtArgument->text());
+            on_txtArgument_textEdited();
         } else {
             updateArgumentCompleter(historyList);
         }
@@ -298,15 +300,17 @@ void MainWindow::on_txtArgument_downReleased()
     updateArgumentCompleter(historyList);
 }
 
-void MainWindow::on_txtArgument_textEdited(QString argument)
+void MainWindow::on_txtArgument_textEdited()
 {
     emit cancelQuery();
 
-    if (argument.isNull() || argument.isEmpty()) {
+    if (queryURL.isEmpty()) {
         return;
     }
 
-    if (queryURL.isNull() || queryURL.isEmpty()) {
+    QString argument = ui->txtArgument->encodedText();
+
+    if (argument.isEmpty()) {
         return;
     }
 

@@ -117,6 +117,11 @@ QList<Target *> *PersistenceHandler::loadTargets(bool fetchDisabled, QObject *pa
     path.append(FILE_TARGETS);
     QFile *config = new QFile(path, parent);
 
+    if (!config->exists()) {
+        QFile defaultFile(RES_CONFIG);
+        defaultFile.copy(path);
+    }
+
 //    QErrorMessage errorMessage;
 
     QList<Target *> *targets = new QList<Target *>();

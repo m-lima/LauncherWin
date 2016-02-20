@@ -9,6 +9,7 @@ class ArgumentEditor : public QLineEdit
     Q_OBJECT
 public:
     explicit ArgumentEditor(QWidget *parent = 0);
+    QString encodedText();
 
 signals:
     void focussed();

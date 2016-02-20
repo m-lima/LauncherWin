@@ -11,7 +11,7 @@ public:
     explicit HotKeyEditor(QWidget *parent = 0);
 
 private:
-    virtual void keyReleaseEvent(QKeyEvent *) Q_DECL_OVERRIDE;
+    virtual void keyPressEvent(QKeyEvent *) Q_DECL_OVERRIDE;
 };
 
 #endif // HOTKEYEDITOR_H

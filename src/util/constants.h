@@ -17,8 +17,9 @@
 #define FILE_LAST "/last.cfg"
 #define FILE_HISTORY_EXTENSION ".history"
 
-//Images
-#define IMG_TRAY ":/tray/iconSmall.png"
+//Resources
+#define RES_TRAY ":/tray/iconSmall.png"
+#define RES_CONFIG ":/config/targets.cfg"
 
 //Errors
 //#define EDIT_ERROR_TYPE_WRONG_ATT_NUMBER "WrongAttributeNumber"

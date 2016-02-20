@@ -54,7 +54,7 @@ private slots:
     void on_txtArgument_focussed();
     void on_txtArgument_returnPressed();
     void on_txtArgument_downReleased();
-    void on_txtArgument_textEdited(QString);
+    void on_txtArgument_textEdited();
     void on_txtTarget_returnPressed();
     void on_txtTarget_textChanged(QString);
 };

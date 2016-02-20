@@ -12,7 +12,7 @@ Controller::Controller(QObject *parent) :
 
     if (QSystemTrayIcon::isSystemTrayAvailable())
     {
-        tray = new TrayIcon(QIcon(IMG_TRAY), this);
+        tray = new TrayIcon(QIcon(RES_TRAY), this);
         connect(tray, SIGNAL(close()), this, SLOT(closeApp()));
         connect(tray, SIGNAL(open()), this, SLOT(trayOpen()));
         connect(tray, SIGNAL(edit()), this, SLOT(edit()));
