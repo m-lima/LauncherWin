@@ -8,7 +8,7 @@ class TrayIcon : public QSystemTrayIcon
 {
     Q_OBJECT
 public:
-    explicit TrayIcon(const QIcon &icon, QObject *parent);
+    explicit TrayIcon(QIcon const &icon, QObject *parent);
     ~TrayIcon();
 
 private:

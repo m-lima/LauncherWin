@@ -12,7 +12,7 @@ public:
         TargetType = 0x451
     };
 
-    explicit Target(QListWidget *parent = 0) : QListWidgetItem(parent, TargetType){}
+    explicit Target(QListWidget *parent = 0) : QListWidgetItem(parent, TargetType) {}//if (Target::DISABLED_BRUSH == 0) Target::DISABLED_BRUSH = new QBrush(QColor(150, 150, 150));}//, DISABLED_BRUSH(QColor(150, 150, 150)){}
 
     inline QString const & getName() const {return name_;} //*(new QString(qvariant_cast<QString>(data(Qt::DisplayRole))));}
     inline QString const & getCommand() const {return command_;}
@@ -22,6 +22,7 @@ public:
 
 
 private:
+    static QBrush const DISABLED_BRUSH;
     QString name_;
     QString command_;
     QString query_;
@@ -50,7 +51,8 @@ public slots:
             //The solution of using a static private variable in the header and defined in the .cpp would solve, but with a longer approach. It is best used if the variable would be shared across multiple functions
             //static QBrush const disabledBrush(QColor(150, 150, 150));
 
-            setData(Qt::ForegroundRole, QBrush(QColor(150, 150, 150)));
+            //setData(Qt::ForegroundRole, QBrush(QColor(150, 150, 150)));
+            setData(Qt::ForegroundRole, DISABLED_BRUSH);
         }
     }
     inline void setHotKey(QString const &hotKey = "") {hotKey_ = hotKey;}

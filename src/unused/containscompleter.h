@@ -8,7 +8,7 @@ class ContainsCompleter : public QCompleter
 {
     Q_OBJECT
 public:
-    explicit ContainsCompleter(const QStringList &words, QObject *parent = 0);
+    explicit ContainsCompleter(QStringList const &words, QObject *parent = 0);
     explicit ContainsCompleter(QStringList *words, QObject *parent = 0);
 
     inline void update(QString word);

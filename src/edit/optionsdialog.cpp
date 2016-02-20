@@ -194,7 +194,7 @@ void OptionsDialog::on_btnSave_clicked()
     PersistenceHandler::saveTargets(targets, this);
     delete targets;
 
-    qApp->exit(EDIT_SAVE);
+    qApp->exit(MAIN_EDIT_SAVE);
 }
 
 void OptionsDialog::on_txtTarget_editingFinished()

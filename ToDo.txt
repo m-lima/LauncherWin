@@ -16,6 +16,7 @@
 [ ] Edit : Custom layout
 [ ] Main - Edit: Add suffix (F1, F2, etc) [eg. define]
 [ ] Main : Support multi-line
+[ ] Core : Make crossplatform
 
 <x> BUG - Main : With app open, hotkey to DIFFERENT target and start typing
 < > BUG - Main : Symbols are not being past through URL (run Google: c++ qt)

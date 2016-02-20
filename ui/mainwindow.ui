@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Launcher</string>
+   <string>Lunger</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QLineEdit" name="txtTarget">

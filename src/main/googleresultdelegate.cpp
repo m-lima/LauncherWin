@@ -5,7 +5,7 @@ GoogleResultDelegate::GoogleResultDelegate(QObject *parent) :
 {
 }
 
-void GoogleResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void GoogleResultDelegate::paint(QPainter *painter, QStyleOptionViewItem const &option, QModelIndex const &index) const
 {
     QString data = index.data().toString();
     if (data.endsWith(' ')) {
@@ -49,7 +49,7 @@ void GoogleResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 //    painter->restore();
 }
 
-QSize GoogleResultDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize GoogleResultDelegate::sizeHint(QStyleOptionViewItem const &option, QModelIndex const &index) const
 {
     QSize size = QStyledItemDelegate::sizeHint(option, index);
     size.setHeight(option.fontMetrics.height());

@@ -8,7 +8,6 @@
 #include <QTextStream>
 #include <QLocalSocket>
 #include <QStringListModel>
-#include "windows.h"
 
 #include "queryworker.h"
 #include "googleresultdelegate.h"
@@ -66,10 +65,9 @@ void MainWindow::newConnection()
 //    activateWindow();
 }
 
-void MainWindow::initialize(const QString &target)
+void MainWindow::initialize(QString const &target)
 {
     emit cancelQuery();
-    forceFocus();
 
     if (target == NULL || target.isEmpty()) {
         QString *target = new QString();
@@ -82,38 +80,19 @@ void MainWindow::initialize(const QString &target)
 
         checkTarget(ui->txtTarget->text());
 
+        forceFocus();
         ui->txtTarget->setFocus(Qt::ActiveWindowFocusReason);
         ui->txtTarget->selectAll();
 
     } else {
         ui->txtTarget->setText(target);
-//        ui->txtArgument->setText("");
+//        ui->txtArgument->setText("");        
+        forceFocus();
         ui->txtArgument->setFocus(Qt::ActiveWindowFocusReason);
     }
 }
 
-void MainWindow::forceFocus()
-{
-    activateWindow();
-    HWND winID = (HWND) winId();
-
-    if (IsIconic(winID)) {
-        SendMessage(winID, WM_SYSCOMMAND, SC_RESTORE, 0);
-    }
-
-    DWORD foregroundThreadPID = GetWindowThreadProcessId(GetForegroundWindow(), NULL);
-    DWORD threadPID = GetWindowThreadProcessId(winID, NULL);
-
-    if (foregroundThreadPID != threadPID) {
-        AttachThreadInput(foregroundThreadPID, threadPID, true);
-        SetForegroundWindow(winID);
-        AttachThreadInput(foregroundThreadPID, threadPID, false);
-    } else {
-        SetForegroundWindow(winID);
-    }
-}
-
-void MainWindow::saveHistory(const Target &target)
+void MainWindow::saveHistory(Target const &target)
 {
     QString argument = ui->txtArgument->text().trimmed();
 
@@ -131,7 +110,7 @@ void MainWindow::saveHistory(const Target &target)
     PersistenceHandler::saveHistory(target.getName(), *historyList, this);
 }
 
-void MainWindow::checkTarget(const QString &target)
+void MainWindow::checkTarget(QString const &target)
 {
     if (target.isEmpty()) {
         ui->txtArgument->setEnabled(false);

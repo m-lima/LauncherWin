@@ -1,6 +1,6 @@
 #include "trayicon.h"
 
-TrayIcon::TrayIcon(const QIcon &icon, QObject *parent) :
+TrayIcon::TrayIcon(QIcon const &icon, QObject *parent) :
     QSystemTrayIcon(icon, parent)
 {
 

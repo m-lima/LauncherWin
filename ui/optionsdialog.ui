@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Launcher</string>
+   <string>Lunger</string>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
@@ -405,6 +405,11 @@
  <tabstops>
   <tabstop>lstTargets</tabstop>
   <tabstop>txtTarget</tabstop>
+  <tabstop>chkEnabled</tabstop>
+  <tabstop>rdoQuery</tabstop>
+  <tabstop>rdoQuick</tabstop>
+  <tabstop>txtCommand</tabstop>
+  <tabstop>txtQuery</tabstop>
   <tabstop>btnAdd</tabstop>
   <tabstop>btnRemove</tabstop>
   <tabstop>btnSave</tabstop>

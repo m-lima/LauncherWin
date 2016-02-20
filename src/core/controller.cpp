@@ -106,7 +106,7 @@ void Controller::edit()
 
 void Controller::editClosed(int code)
 {
-    if (code == EDIT_SAVE) {
+    if (code == MAIN_EDIT_SAVE) {
         capturer->reload();
     }
 

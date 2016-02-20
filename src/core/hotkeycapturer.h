@@ -9,7 +9,7 @@ class HotkeyCapturer : public QThread
 {
     Q_OBJECT
 public:
-    explicit HotkeyCapturer(const bool &paused, QObject *parent = 0);
+    explicit HotkeyCapturer(bool const &paused, QObject *parent = 0);
     ~HotkeyCapturer();
     void run() Q_DECL_OVERRIDE;
 

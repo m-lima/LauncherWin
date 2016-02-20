@@ -1,6 +1,6 @@
 #include "containscompleter.h"
 
-ContainsCompleter::ContainsCompleter(const QStringList& words, QObject *parent) :
+ContainsCompleter::ContainsCompleter(QStringList const &words, QObject *parent) :
     QCompleter(parent), m_list(words), m_model()
 {
     setModel(&m_model);

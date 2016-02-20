@@ -9,10 +9,6 @@
 #include <QTextStream>
 #include "constants.h"
 
-PersistenceHandler::PersistenceHandler()
-{
-}
-
 void PersistenceHandler::saveHistory(QString const &target, QStringList const &historyList, QObject *parent)
 {
     QString path(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
@@ -35,7 +31,7 @@ void PersistenceHandler::saveHistory(QString const &target, QStringList const &h
     delete history;
 }
 
-void PersistenceHandler::loadHistory(const QString &target, QStringList *list, QObject *parent)
+void PersistenceHandler::loadHistory(QString const &target, QStringList *list, QObject *parent)
 {
     QString path(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     path.append('/');
@@ -95,7 +91,7 @@ void PersistenceHandler::loadLast(QString *target, QString *argument, QObject *p
     delete last;
 }
 
-void PersistenceHandler::saveLast(const QString &target, const QString &argument, QObject *parent)
+void PersistenceHandler::saveLast(QString const &target, QString const &argument, QObject *parent)
 {
     QString path(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     path.append(FILE_LAST);

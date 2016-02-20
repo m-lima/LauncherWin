@@ -38,14 +38,14 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QApplication::setStyle(QStyleFactory::create("Fusion"));
 
-    QCoreApplication::setOrganizationName("Mali");
-    QCoreApplication::setOrganizationDomain("mali.com");
-    QCoreApplication::setApplicationName("Launcher");
+    QCoreApplication::setOrganizationName(MAIN_ORGANIZATION_NAME);
+    QCoreApplication::setOrganizationDomain(MAIN_ORGANIZATION_DOMAIN);
+    QCoreApplication::setApplicationName(MAIN_APPLICATION_NAME);
 
     //If no arguments, this is the main controller
     if (argc < 2) {
 
-        QSharedMemory shared(SHARED_MEMORY);
+        QSharedMemory shared(MAIN_SHARED_MEMORY);
         if (!shared.create(512, QSharedMemory::ReadWrite)) {
             if (shared.attach(QSharedMemory::ReadWrite)) {
                 shared.detach();

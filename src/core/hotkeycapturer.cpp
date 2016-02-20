@@ -8,7 +8,7 @@
 #include "../util/constants.h"
 #include "../util/persistencehandler.h"
 
-HotkeyCapturer::HotkeyCapturer(const bool &paused, QObject *parent) :
+HotkeyCapturer::HotkeyCapturer(bool const &paused, QObject *parent) :
     QThread(parent)
 {
     active = false;

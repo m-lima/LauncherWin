@@ -40,11 +40,11 @@ private:
     int editingCompleter;
 
     void execute();
-    void checkTarget(const QString &target);
-    void saveHistory(const Target &target);
+    void checkTarget(QString const &target);
+    void saveHistory(Target const &target);
     void updateTargetCompleter();
     void updateArgumentCompleter(QStringList *list, bool google = false);
-    void initialize(const QString &target);
+    void initialize(QString const &target);
     void forceFocus();
 
 private slots:
