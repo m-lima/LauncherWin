@@ -5,6 +5,7 @@
 #include <QLocalServer>
 
 #include "../util/target.h"
+#include "queryworker.h"
 
 namespace Ui {
     class MainWindow;
@@ -20,6 +21,7 @@ public:
 
 signals:
     void cancelQuery();
+    void startQuery(QString query, QString argument);
 
 protected:
     void keyReleaseEvent(QKeyEvent *);
@@ -32,6 +34,9 @@ private:
     QStringList *historyList;
 
     QLocalServer *server;
+
+    QThread *workerThread;
+    QueryWorker *worker;
 
     QString lastTarget;
     QString queryURL;

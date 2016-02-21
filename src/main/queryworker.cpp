@@ -4,57 +4,47 @@
 #include <QXmlStreamReader>
 #include <QEventLoop>
 
-QueryWorker::QueryWorker(QString &query, QString &argument, QObject *parent) :
-    QThread(parent)
-{
-    url = new QUrl(query + argument);
-    reply = NULL;
-}
-
-QueryWorker::~QueryWorker()
+QueryWorker::QueryWorker(QObject *parent) :
+    QObject(parent)
 {
 }
 
-void QueryWorker::run()
+void QueryWorker::query(QString query, QString argument)
 {
-    QEventLoop *looper = new QEventLoop(this);
+    QUrl url = QUrl(query + argument);
     QNetworkAccessManager *qnam = new QNetworkAccessManager(this);
 
-    reply = qnam->get(QNetworkRequest(*url));
-    connect(reply, SIGNAL(finished()), looper, SLOT(quit()));
-    looper->exec();
+    QNetworkReply *reply = qnam->get(QNetworkRequest(url));
+    connect(qnam, SIGNAL(finished(QNetworkReply*)), this, SLOT(process(QNetworkReply*)));
+    connect(this, SIGNAL(abortRequested()), reply, SLOT(abort()));
+}
 
-    QXmlStreamReader reader(reply->readAll());
+void QueryWorker::process(QNetworkReply *reply)
+{
 
-    QStringList * results = new QStringList();
-    QString data;
-    while (!reader.atEnd()) {
-        reader.readNext();
-        if (reader.name() == "suggestion") {
-            data = reader.attributes().value("data").toString();
-            if (!data.isNull() && !data.isEmpty()) {
-                results->append(data + ' ');
+    if (reply->isOpen() && reply->isReadable()) {
+        QXmlStreamReader reader(reply->readAll());
+
+        QStringList *results = new QStringList();
+        QString data;
+        while (reply->isReadable() && !reader.atEnd()) {
+            reader.readNext();
+            if (reader.name() == "suggestion") {
+                data = reader.attributes().value("data").toString();
+                if (!data.isNull() && !data.isEmpty()) {
+                    results->append(data + ' ');
+                }
             }
         }
+
+        emit queryFinished(results);
     }
 
-    delete looper;
-    delete reply;
-    delete qnam;
-    delete url;
-
-    emit queryFinished(results);
-    terminate();
+    reply->deleteLater();
+    reply->manager()->deleteLater();
 }
 
 void QueryWorker::abort()
 {
-    if (reply != NULL) {
-        reply->abort();
-        delete reply;
-    }
-
-    delete url;
-
-    terminate();
+    emit abortRequested();
 }

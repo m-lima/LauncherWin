@@ -1,29 +1,25 @@
 #ifndef QUERYWORKER_H
 #define QUERYWORKER_H
 
-#include <QThread>
 #include <QStringList>
 
 #include <QUrl>
 #include <QNetworkReply>
 
-class QueryWorker : public QThread
+class QueryWorker : public QObject
 {
     Q_OBJECT
 public:
-    explicit QueryWorker(QString &query, QString &argument, QObject *parent = 0);
-    ~QueryWorker();
-    void run() Q_DECL_OVERRIDE;
-
-private:
-    QUrl *url;
-    QNetworkReply *reply;
+    explicit QueryWorker(QObject *parent = 0);
 
 signals:
     void queryFinished(QStringList *results);
-    
+    void abortRequested();
+
 public slots:
     void abort();
+    void query(QString query, QString argument);
+    void process(QNetworkReply *reply);
 };
 
 #endif // QUERYWORKER_H

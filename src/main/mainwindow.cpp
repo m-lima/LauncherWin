@@ -9,9 +9,8 @@
 #include <QLocalSocket>
 #include <QStringListModel>
 
-#include <QDebug>
+#include <QThread>
 
-#include "queryworker.h"
 #include "googleresultdelegate.h"
 #include "../util/constants.h"
 #include "../util/persistencehandler.h"
@@ -39,6 +38,15 @@ MainWindow::MainWindow(QList<Target *> *targetList, QString target) :
 
     forceFocus();
     initialize(target);
+
+    workerThread = new QThread(this);
+    worker = new QueryWorker();
+    worker->moveToThread(workerThread);
+    connect(this, SIGNAL(startQuery(QString, QString)), worker, SLOT(query(QString, QString)), Qt::QueuedConnection);
+    connect(this, SIGNAL(cancelQuery()), worker, SLOT(abort()));
+    connect(worker, SIGNAL(queryFinished(QStringList *)), this, SLOT(queryDone(QStringList *)));
+
+    workerThread->start();
 }
 
 MainWindow::~MainWindow()
@@ -48,6 +56,13 @@ MainWindow::~MainWindow()
     delete historyList;
     server->close();
     delete server;
+
+    worker->abort();
+    workerThread->quit();
+    workerThread->wait();
+
+    delete worker;
+    delete workerThread;
 }
 
 void MainWindow::newConnection()
@@ -315,13 +330,7 @@ void MainWindow::on_txtArgument_textEdited()
     }
 
     if (googleEnabled) {
-        QueryWorker *worker = new QueryWorker(queryURL, argument);
-        worker->moveToThread(worker);
-        connect(this, SIGNAL(cancelQuery()), worker, SLOT(abort()));
-        connect(worker, SIGNAL(queryFinished(QStringList *)), this, SLOT(queryDone(QStringList *)));
-        connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
-
-        worker->start();
+        emit startQuery(queryURL, argument);
     }
 }
 
