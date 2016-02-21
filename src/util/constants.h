@@ -3,7 +3,7 @@
 
 //Main
 #define MAIN_SHARED_MEMORY "f463aca8-8291-4095-9580-7bafc5ef2005"
-#define MAIN_EDIT_SAVE 27
+//#define MAIN_EDIT_SAVE 27
 #define MAIN_ORGANIZATION_NAME "MFLima"
 #define MAIN_ORGANIZATION_DOMAIN "mflima.com"
 #define MAIN_APPLICATION_NAME "Lunger"

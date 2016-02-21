@@ -15,11 +15,8 @@ public:
     void finalize();
 
 private:
-    bool paused;
     TrayIcon *tray;
     HotkeyCapturer *capturer;
-
-    void setCapturerActive(bool);
 
 private slots:
     void launch(QString);

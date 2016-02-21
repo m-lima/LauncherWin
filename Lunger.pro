@@ -28,8 +28,7 @@ SOURCES += src/main.cpp\
     src/util/persistencehandler.cpp \
     src/edit/optionsdialog.cpp \
     src/edit/hotkeyeditor.cpp \
-    src/view/argumenteditor.cpp \
-    src/util/target.cpp
+    src/view/argumenteditor.cpp
     #src/view/borderlayout.cpp
 
 HEADERS  += src/core/controller.h \
@@ -38,21 +37,21 @@ HEADERS  += src/core/controller.h \
     src/main/mainwindow.h \
     src/main/googleresultdelegate.h \
     src/main/queryworker.h \
-    src/util/target.h \
     src/util/persistencehandler.h \
     src/util/constants.h \
+    src/util/target.h \
     src/edit/optionsdialog.h \
     src/edit/hotkeyeditor.h \
     src/view/argumenteditor.h
     #src/view/borderlayout.h
 
 win32|win64 {
-    SOURCES += src/main/mainwindow_win.cpp
+    SOURCES += src/main/native/mainwindow_win.cpp
 }
 macx {
-    SOURCES += src/main/mainwindow_mac.cpp
+    SOURCES += src/main/native/mainwindow_mac.cpp
 } else:unix{
-    SOURCES += src/main/mainwindow_unix.cpp
+    SOURCES += src/main/native/mainwindow_unix.cpp
 }
 
 FORMS    += ui/mainwindow.ui \

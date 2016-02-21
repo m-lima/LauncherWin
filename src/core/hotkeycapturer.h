@@ -1,36 +1,45 @@
 #ifndef HOTKEYCAPTURER_H
 #define HOTKEYCAPTURER_H
 
-#include <QThread>
+#include <QObject>
+#include <QAbstractNativeEventFilter>
 #include <QStringList>
-#include <QSharedMemory>
 
-class HotkeyCapturer : public QThread
+class HotkeyCapturer : public QObject,  public QAbstractNativeEventFilter
 {
     Q_OBJECT
 public:
-    explicit HotkeyCapturer(bool const &paused, QObject *parent = 0);
+    explicit HotkeyCapturer(QObject *parent = 0);
     ~HotkeyCapturer();
-    void run() Q_DECL_OVERRIDE;
 
-private:
-    bool active;
-    bool paused_;
-    //DWORD threadID;
-    QSharedMemory shared;
-    QStringList hotkeys;
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE;
+    inline void togglePaused() {setPaused(!paused_);}
+    inline bool isPaused() const {return paused_;}
+    inline void setPaused(bool paused)
+    {
+        if (paused == paused_) return;
+        paused_ = paused;
+        reloadHotkeys();
+    }
+    inline void setActive(bool active)
+    {
+        if (active == registeredFilter) return;
+        if (active) registerHotkeys(true);
+        else unregisterHotkeys(true);
+        registeredFilter = active;
+    }
 
-    void registerHotkeys();
-    void unregisterHotkeys();
-    
 signals:
     void hotkeyPressed(QString);
-    
-public slots:
-    //void setPaused(bool paused);
-    void deactivate();
-    void reload();
-    
+
+private:
+    bool paused_;
+    bool registeredFilter;
+    QStringList hotkeys;
+
+    void registerHotkeys(bool addFilter);
+    void unregisterHotkeys(bool removeFilter);
+    inline void reloadHotkeys() {unregisterHotkeys(false); registerHotkeys(false);}
 };
 
 #endif // HOTKEYCAPTURER_H
